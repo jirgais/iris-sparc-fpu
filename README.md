@@ -12,9 +12,13 @@ might vary slightly between IRIS and Meiko, but the calculated values
 are identical for any type of operation and inputs. IRIS also supports
 the FSMULD instruction which Meiko does not.
 
+Refer to the [manual](https://github.com/jirgais/iris-sparc-fpu/tree/main/doc/iris_manual.pdf) for details on signals and operation.
+
 ## Performance
 
-IRIS FPU is iterative, which means that only one instruction can be excuted at a time. The table below shows the number of cycles necessary for each group of instrutions.
+IRIS FPU is iterative, which means that only one instruction can be excuted
+at a time. The table below shows the number of cycles necessary for each group
+of instructions.
 
 |  Instruction     |   Description        |  Clk min|  Clk avg|  Clk max|
 |------------------|----------------------|---------|---------|---------|
@@ -37,7 +41,7 @@ The IRIS FPU consists of three files:
 
     iris_mul.vhd     -- multiplier
     iris_div.vhd     -- divider
-    irifpu.vhd       -- main datapath and top-level unit
+    irisfpu.vhd      -- main datapath and top-level unit
 
 A testbench is provided in the `sim` directory. The testbench reads instructions and operands from a text file, and checks the FPU result and exception flags. To run the simulation with [NVC](https://github.com/nickg/nvc), just do:
 
