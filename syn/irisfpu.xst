@@ -1,0 +1,1 @@
+run -top irisfpu -fsm_encoding auto -ifn irisfpu.prj -ifmt vhdl -p XC6SLX75-fgg484-2 -ofn irisfpu -iobuf no -bus_delimiter ()

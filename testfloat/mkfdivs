@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=1
+SEED2=2
+SEED3=3
+SEED4=4
+N=200000
+LEVEL=1
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfdivs_near.txt
+echo "F02      -- testfloat exception bit order" >> tfdivs_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N f32_div \
+  | sed 's/^/04D /' | sort | uniq | shuf >> tfdivs_near.txt
+cp tfdivs_near.txt tfdivs.txt
+echo "F01 1    -- round to zero" > tfdivs_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfdivs_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N f32_div \
+  | sed 's/^/04D /' | sort | uniq | shuf >> tfdivs_zero.txt
+cat tfdivs_zero.txt >> tfdivs.txt
+echo "F01 2    -- round to +inf" > tfdivs_up.txt
+echo "F02      -- testfloat exception bit order" >> tfdivs_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N f32_div \
+  | sed 's/^/04D /' | sort | uniq | shuf >> tfdivs_up.txt
+cat tfdivs_up.txt >> tfdivs.txt
+echo "F01 3    -- round to -inf" > tfdivs_down.txt
+echo "F02      -- testfloat exception bit order" >> tfdivs_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N f32_div \
+  | sed 's/^/04D /' | sort | uniq | shuf >> tfdivs_down.txt
+cat tfdivs_down.txt >> tfdivs.txt

@@ -1,0 +1,11 @@
+# NOTE:  fstoi always rounds to zero on SPARC
+# NOTE2: testfloat does not generate correct exception flags, so the output
+#        data is run trough regen filter.
+set -x
+SEED=5
+N=500000
+LEVEL=1
+TN=-tininessbefore
+testfloat_gen $TN -seed $SEED -level $LEVEL -rminMag -n $N f32_to_i32 \
+  | sed 's/^/0D1 /' | sort | uniq | shuf | ./regen > tfstoi_zero.txt
+cp tfstoi_zero.txt tfstoi.txt

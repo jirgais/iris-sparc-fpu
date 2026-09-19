@@ -1,0 +1,17 @@
+# NOTE2: output data is run trough regen filter to get correct fcc
+set -x
+SEED1=5
+SEED2=6
+SEED3=7
+SEED4=8
+N=500000
+LEVEL=1
+TN=-tininessbefore
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -n $N f32_eq \
+  | sed 's/^/251 /' | sort | uniq | shuf | ./regen > tfcmps.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -n $N f64_eq \
+  | sed 's/^/252 /' | sort | uniq | shuf | ./regen > tfcmpd.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -n $N f32_eq \
+  | sed 's/^/255 /' | sort | uniq | shuf | ./regen > tfcmpes.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -n $N f64_eq \
+  | sed 's/^/256 /' | sort | uniq | shuf | ./regen > tfcmped.txt

@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=5
+SEED2=6
+SEED3=7
+SEED4=8
+N=200000
+LEVEL=2
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfstod_near.txt
+echo "F02      -- testfloat exception bit order" >> tfstod_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N f32_to_f64 \
+  | sed 's/^/0C9 /' | sort | uniq | shuf >> tfstod_near.txt
+cp tfstod_near.txt tfstod.txt
+echo "F01 1    -- round to zero" > tfstod_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfstod_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N f32_to_f64 \
+  | sed 's/^/0C9 /' | sort | uniq | shuf >> tfstod_zero.txt
+cat tfstod_zero.txt >> tfstod.txt
+echo "F01 2    -- round to +inf" > tfstod_up.txt
+echo "F02      -- testfloat exception bit order" >> tfstod_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N f32_to_f64 \
+  | sed 's/^/0C9 /' | sort | uniq | shuf >> tfstod_up.txt
+cat tfstod_up.txt >> tfstod.txt
+echo "F01 3    -- round to -inf" > tfstod_down.txt
+echo "F02      -- testfloat exception bit order" >> tfstod_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N f32_to_f64 \
+  | sed 's/^/0C9 /' | sort | uniq | shuf >> tfstod_down.txt
+cat tfstod_down.txt >> tfstod.txt

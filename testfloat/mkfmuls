@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=1
+SEED2=2
+SEED3=3
+SEED4=4
+N=200000
+LEVEL=1
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfmuls_near.txt
+echo "F02      -- testfloat exception bit order" >> tfmuls_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N f32_mul \
+  | sed 's/^/049 /' | sort | uniq | shuf >> tfmuls_near.txt
+cp tfmuls_near.txt tfmuls.txt
+echo "F01 1    -- round to zero" > tfmuls_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfmuls_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N f32_mul \
+  | sed 's/^/049 /' | sort | uniq | shuf >> tfmuls_zero.txt
+cat tfmuls_zero.txt >> tfmuls.txt
+echo "F01 2    -- round to +inf" > tfmuls_up.txt
+echo "F02      -- testfloat exception bit order" >> tfmuls_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N f32_mul \
+  | sed 's/^/049 /' | sort | uniq | shuf >> tfmuls_up.txt
+cat tfmuls_up.txt >> tfmuls.txt
+echo "F01 3    -- round to -inf" > tfmuls_down.txt
+echo "F02      -- testfloat exception bit order" >> tfmuls_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N f32_mul \
+  | sed 's/^/049 /' | sort | uniq | shuf >> tfmuls_down.txt
+cat tfmuls_down.txt >> tfmuls.txt

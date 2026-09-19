@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=5
+SEED2=6
+SEED3=7
+SEED4=8
+N=300000
+LEVEL=1
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfitos_near.txt
+echo "F02      -- testfloat exception bit order" >> tfitos_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N i32_to_f32 \
+  | sed 's/^/0C4 /' | sort | uniq | shuf >> tfitos_near.txt
+cp tfitos_near.txt tfitos.txt
+echo "F01 1    -- round to zero" > tfitos_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfitos_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N i32_to_f32 \
+  | sed 's/^/0C4 /' | sort | uniq | shuf >> tfitos_zero.txt
+cat tfitos_zero.txt >> tfitos.txt
+echo "F01 2    -- round to +inf" > tfitos_up.txt
+echo "F02      -- testfloat exception bit order" >> tfitos_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N i32_to_f32 \
+  | sed 's/^/0C4 /' | sort | uniq | shuf >> tfitos_up.txt
+cat tfitos_up.txt >> tfitos.txt
+echo "F01 3    -- round to -inf" > tfitos_down.txt
+echo "F02      -- testfloat exception bit order" >> tfitos_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N i32_to_f32 \
+  | sed 's/^/0C4 /' | sort | uniq | shuf >> tfitos_down.txt
+cat tfitos_down.txt >> tfitos.txt

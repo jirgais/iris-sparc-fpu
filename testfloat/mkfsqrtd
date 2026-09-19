@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=5
+SEED2=6
+SEED3=7
+SEED4=8
+N=200000
+LEVEL=1
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfsqrtd_near.txt
+echo "F02      -- testfloat exception bit order" >> tfsqrtd_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N f64_sqrt \
+  | sed 's/^/02A /' | sort | uniq | shuf >> tfsqrtd_near.txt
+cp tfsqrtd_near.txt tfsqrtd.txt
+echo "F01 1    -- round to zero" > tfsqrtd_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfsqrtd_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N f64_sqrt \
+  | sed 's/^/02A /' | sort | uniq | shuf >> tfsqrtd_zero.txt
+cat tfsqrtd_zero.txt >> tfsqrtd.txt
+echo "F01 2    -- round to +inf" > tfsqrtd_up.txt
+echo "F02      -- testfloat exception bit order" >> tfsqrtd_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N f64_sqrt \
+  | sed 's/^/02A /' | sort | uniq | shuf >> tfsqrtd_up.txt
+cat tfsqrtd_up.txt >> tfsqrtd.txt
+echo "F01 3    -- round to -inf" > tfsqrtd_down.txt
+echo "F02      -- testfloat exception bit order" >> tfsqrtd_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N f64_sqrt \
+  | sed 's/^/02A /' | sort | uniq | shuf >> tfsqrtd_down.txt
+cat tfsqrtd_down.txt >> tfsqrtd.txt

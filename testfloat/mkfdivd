@@ -1,0 +1,29 @@
+#
+set -x
+SEED1=1
+SEED2=2
+SEED3=3
+SEED4=4
+N=200000
+LEVEL=1
+TN=-tininessbefore
+echo "F01 0    -- round to near" > tfdivd_near.txt
+echo "F02      -- testfloat exception bit order" >> tfdivd_near.txt
+testfloat_gen $TN -seed $SEED1 -level $LEVEL -rnear_even -n $N f64_div \
+  | sed 's/^/04E /' | sort | uniq | shuf >> tfdivd_near.txt
+cp tfdivd_near.txt tfdivd.txt
+echo "F01 1    -- round to zero" > tfdivd_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfdivd_zero.txt
+testfloat_gen $TN -seed $SEED2 -level $LEVEL -rminMag -n $N f64_div \
+  | sed 's/^/04E /' | sort | uniq | shuf >> tfdivd_zero.txt
+cat tfdivd_zero.txt >> tfdivd.txt
+echo "F01 2    -- round to +inf" > tfdivd_up.txt
+echo "F02      -- testfloat exception bit order" >> tfdivd_up.txt
+testfloat_gen $TN -seed $SEED3 -level $LEVEL -rmax -n $N f64_div \
+  | sed 's/^/04E /' | sort | uniq | shuf >> tfdivd_up.txt
+cat tfdivd_up.txt >> tfdivd.txt
+echo "F01 3    -- round to -inf" > tfdivd_down.txt
+echo "F02      -- testfloat exception bit order" >> tfdivd_down.txt
+testfloat_gen $TN -seed $SEED4 -level $LEVEL -rmin -n $N f64_div \
+  | sed 's/^/04E /' | sort | uniq | shuf >> tfdivd_down.txt
+cat tfdivd_down.txt >> tfdivd.txt

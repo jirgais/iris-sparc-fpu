@@ -1,0 +1,11 @@
+# NOTE:  fdtoi always rounds to zero on SPARC
+# NOTE2: testfloat does not generate correct exception flags, so the output
+#        data is run trough regen filter.
+set -x
+SEED=5
+N=500000
+LEVEL=1
+TN=-tininessbefore
+testfloat_gen $TN -seed $SEED -level $LEVEL -rminMag -n $N f64_to_i32 \
+  | sed 's/^/0D2 /' | sort | uniq | shuf | ./regen > tfdtoi_zero.txt
+cp tfdtoi_zero.txt tfdtoi.txt

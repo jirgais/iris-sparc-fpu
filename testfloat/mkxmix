@@ -1,0 +1,29 @@
+#
+set -x
+paste -d "\n" *_near*.txt *cmp*.txt > x
+sort x | uniq > y
+tail -n +2 y > x
+echo "F01 0    -- round to near" > tfmix_near.txt
+echo "F02      -- testfloat exception bit order" >> tfmix_near.txt
+grep -v round x | grep -v testfloat | shuf >> tfmix_near.txt
+#
+paste -d "\n" *zero*.txt *cmp*.txt > x
+sort x | uniq > y
+tail -n +2 y > x
+echo "F01 1    -- round to zero" > tfmix_zero.txt
+echo "F02      -- testfloat exception bit order" >> tfmix_zero.txt
+grep -v round x | grep -v testfloat | shuf >> tfmix_zero.txt
+#
+paste -d "\n" *_up*.txt *cmp*.txt > x
+sort x | uniq > y
+tail -n +2 y > x
+echo "F01 2    -- round to +inf" > tfmix_up.txt
+echo "F02      -- testfloat exception bit order" >> tfmix_up.txt
+grep -v round x | grep -v testfloat | shuf >> tfmix_up.txt
+#
+paste -d "\n" *_down*.txt *cmp*.txt > x
+sort x | uniq > y
+tail -n +2 y > x
+echo "F01 3    -- round to -inf" > tfmix_down.txt
+echo "F02      -- testfloat exception bit order" >> tfmix_down.txt
+grep -v round x | grep -v testfloat | shuf >> tfmix_down.txt

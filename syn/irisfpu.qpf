@@ -1,0 +1,6 @@
+UARTUS_VERSION = "23.1"
+DATE = "11:54:33  September 19, 2026"
+
+# Revisions
+
+PROJECT_REVISION = "irisfpu"

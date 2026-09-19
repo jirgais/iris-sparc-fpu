@@ -1,0 +1,4 @@
+work ../rtl/iris_mul.vhd
+work ../rtl/iris_div.vhd
+work ../rtl/irisfpu.vhd
+
